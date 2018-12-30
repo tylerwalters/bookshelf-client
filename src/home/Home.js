@@ -5,12 +5,8 @@ import { fetchBooks } from '../modules/books';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 
-import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
 import Typography from '@material-ui/core/Typography';
-import InputAdornment from '@material-ui/core/InputAdornment';
 
 import Page from '../shared/components/Page';
 
@@ -34,21 +30,33 @@ class Home extends Component {
   filterBooks = e => {
     const term = e.target.value.toLowerCase();
     const { books } = this.props;
+    const sortedBooks = this.sortAlphabetical(books);
 
     if (term) {
-      const filteredBooks = books.filter(book =>
+      const filteredBooks = sortedBooks.filter(book =>
         book.title.toLowerCase().includes(term)
       );
       this.setState({ filteredBooks });
     } else {
-      this.setState({ filteredBooks: books });
+      this.setState({ filteredBooks: sortedBooks });
     }
   };
+
+  sortAlphabetical = books =>
+    books.sort((a, b) => {
+      if (a.title < b.title) {
+        return -1;
+      }
+      if (a.title > b.title) {
+        return 1;
+      }
+      return 0;
+    });
 
   render() {
     const { filteredBooks } = this.state;
     const { classes } = this.props;
-    const books = filteredBooks || this.props.books;
+    const books = filteredBooks || this.sortAlphabetical(this.props.books);
 
     return (
       <Page>
