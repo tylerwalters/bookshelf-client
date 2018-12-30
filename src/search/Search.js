@@ -5,6 +5,8 @@ import { search } from '../modules/search';
 
 import ResultsList from './ResultsList';
 import SelectedBook from './SelectedBook';
+import Loader from '../shared/components/Loader';
+import Page from '../shared/components/Page';
 
 import './search.css';
 
@@ -15,14 +17,14 @@ class Search extends Component {
 
     if (this.timeout) clearTimeout(this.timeout);
 
-    this.timeout = setTimeout(() => search(query), 500);
+    this.timeout = setTimeout(() => search(query), 300);
   };
 
   render() {
-    const { results, query, selected } = this.props;
+    const { results, query, selected, isSearching } = this.props;
 
     return (
-      <div id="Search">
+      <Page>
         <h1>Add Books</h1>
 
         <input
@@ -31,12 +33,14 @@ class Search extends Component {
           className="search-box"
         />
 
-        {selected ? (
-          <SelectedBook book={selected} />
-        ) : (
+        {isSearching && <Loader />}
+
+        {selected && <SelectedBook book={selected} />}
+
+        {!selected && !isSearching && (
           <ResultsList results={results} query={query} />
         )}
-      </div>
+      </Page>
     );
   }
 }

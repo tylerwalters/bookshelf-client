@@ -1,51 +1,94 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { search } from '../modules/search';
+import { fetchBooks } from '../modules/books';
+import classNames from 'classnames';
+import { withStyles } from '@material-ui/core/styles';
+
+import FormControl from '@material-ui/core/FormControl';
+import TextField from '@material-ui/core/TextField';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import Typography from '@material-ui/core/Typography';
+import InputAdornment from '@material-ui/core/InputAdornment';
+
+import Page from '../shared/components/Page';
 
 import './home.css';
 
+const styles = theme => ({
+  textField: {
+    width: '100%'
+  }
+});
+
 class Home extends Component {
-  searchWithTimeout = e => {
-    const { search } = this.props;
-    const query = e.target.value;
+  state = {
+    filteredBooks: null
+  };
 
-    if (this.timeout) clearTimeout(this.timeout);
+  componentWillMount() {
+    this.props.fetchBooks();
+  }
 
-    this.timeout = setTimeout(() => search(query), 500);
+  filterBooks = e => {
+    const term = e.target.value.toLowerCase();
+    const { books } = this.props;
+
+    if (term) {
+      const filteredBooks = books.filter(book =>
+        book.title.toLowerCase().includes(term)
+      );
+      this.setState({ filteredBooks });
+    } else {
+      this.setState({ filteredBooks: books });
+    }
   };
 
   render() {
-    return (
-      <div id="Home">
-        <h1>Books</h1>
+    const { filteredBooks } = this.state;
+    const { classes } = this.props;
+    const books = filteredBooks || this.props.books;
 
-        <input
-          type="text"
-          onChange={this.searchWithTimeout}
-          className="search-box"
+    return (
+      <Page>
+        <Typography component="h1" variant="h2">
+          Our Books
+        </Typography>
+
+        <TextField
+          id="filter-books"
+          className={classNames(classes.margin, classes.textField)}
+          variant="filled"
+          label="Filter Books"
+          onChange={this.filterBooks}
         />
-      </div>
+
+        <div className="count">Total books: {books.length}</div>
+
+        {books.map(book => (
+          <div key={book.title}>{book.title}</div>
+        ))}
+      </Page>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  results: state.search.results,
-  query: state.search.query,
-  selected: state.search.selected,
-  isSearching: state.search.isSearching
+  books: state.books.books
 });
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      search
+      fetchBooks
     },
     dispatch
   );
 
+const HomeWithStyles = withStyles(styles)(Home);
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Home);
+)(HomeWithStyles);

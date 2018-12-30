@@ -50,7 +50,7 @@ export default (state = initialState, action) => {
   }
 };
 
-export const login = (username, password) => {
+export const login = (username, password, onSuccess) => {
   return dispatch => {
     dispatch({
       type: LOGIN_REQUESTED
@@ -67,6 +67,8 @@ export const login = (username, password) => {
           type: LOGIN,
           token
         });
+
+        if (onSuccess) onSuccess();
       })
       .catch(function(error) {
         if (error.response) {
