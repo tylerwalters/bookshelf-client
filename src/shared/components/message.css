@@ -1,0 +1,14 @@
+.message {
+  padding: 10px;
+  border: 1px solid;
+}
+
+.message--success {
+  border-color: green;
+  background-color: lightgreen;
+}
+
+.message--warning {
+  border-color: #8a0000;
+  background-color: #f1a9b6;
+}
