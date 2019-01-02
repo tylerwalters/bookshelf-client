@@ -9,7 +9,7 @@ import Add from '@material-ui/icons/Add';
 
 const styles = {
   root: {
-    position: 'absolute',
+    position: 'fixed',
     width: '100%',
     bottom: 0
   }
