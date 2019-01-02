@@ -13,7 +13,7 @@ const ResultsList = ({ results, query }) => {
   return (
     <div className="results-list">
       {results.map(book => (
-        <ResultItem book={book} key={book.googleId} />
+        <ResultItem book={book} key={book.id} />
       ))}
     </div>
   );
