@@ -1,8 +1,15 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { search } from '../modules/search';
+import classNames from 'classnames';
+import { withStyles } from '@material-ui/core/styles';
 
+import TextField from '@material-ui/core/TextField';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
+import Clear from '@material-ui/icons/Clear';
+
+import { search, clearSearch } from '../modules/search';
 import ResultsList from './ResultsList';
 import SelectedBook from './SelectedBook';
 import Loader from '../shared/components/Loader';
@@ -10,27 +17,63 @@ import Page from '../shared/components/Page';
 
 import './search.css';
 
+const styles = theme => ({
+  textField: {
+    width: '100%'
+  }
+});
+
 class Search extends Component {
+  state = {
+    query: ''
+  };
+
   searchWithTimeout = e => {
     const { search } = this.props;
     const query = e.target.value;
 
-    if (this.timeout) clearTimeout(this.timeout);
+    this.setState({ query }, () => {
+      if (this.timeout) clearTimeout(this.timeout);
 
-    this.timeout = setTimeout(() => search(query), 300);
+      this.timeout = setTimeout(() => search(query), 300);
+    });
+  };
+
+  clearQuery = () => {
+    const { clearSearch } = this.props;
+
+    this.setState({ query: '' }, () => {
+      clearSearch();
+      this.textField.focus();
+    });
   };
 
   render() {
-    const { results, query, selected, isSearching } = this.props;
+    const { results, selected, isSearching, classes } = this.props;
+    const { query } = this.state;
 
     return (
       <Page>
         <h1>Add Books</h1>
 
-        <input
-          type="text"
+        <TextField
+          inputRef={field => (this.textField = field)}
+          id="search-books"
+          className={classNames(classes.margin, classes.textField)}
+          variant="filled"
+          label="Search Books"
+          value={query}
+          autoFocus
           onChange={this.searchWithTimeout}
-          className="search-box"
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton aria-label="Clear query" onClick={this.clearQuery}>
+                  {<Clear />}
+                </IconButton>
+              </InputAdornment>
+            )
+          }}
         />
 
         {isSearching && <Loader />}
@@ -55,12 +98,15 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      search
+      search,
+      clearSearch
     },
     dispatch
   );
 
+const SearchWithStyles = withStyles(styles)(Search);
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Search);
+)(SearchWithStyles);
