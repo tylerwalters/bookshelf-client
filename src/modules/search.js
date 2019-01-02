@@ -5,6 +5,7 @@ import { apiUrl } from '../shared/utils/api';
 export const SEARCH_REQUESTED = 'search/SEARCH_REQUESTED';
 export const UPDATE_RESULTS = 'search/UPDATE_RESULTS';
 export const UPDATE_SELECTED_STATUS = 'search/UPDATE_SELECTED_STATUS';
+export const CLEAR_SEARCH = 'search/CLEAR_SEARCH';
 
 const initialState = {
   query: '',
@@ -39,6 +40,14 @@ export default (state = initialState, action) => {
         ...resetState,
         results: [],
         selected: action.selected
+      };
+
+    case CLEAR_SEARCH:
+      return {
+        ...resetState,
+        results: [],
+        selected: null,
+        query: ''
       };
 
     default:
@@ -110,3 +119,8 @@ export const addBook = book => {
       });
   };
 };
+
+export const clearSearch = () => dispatch =>
+  dispatch({
+    type: CLEAR_SEARCH
+  });
