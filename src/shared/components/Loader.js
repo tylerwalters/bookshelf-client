@@ -2,7 +2,7 @@ import React from 'react';
 
 import './loader.css';
 
-const Loader = ({ text, type = 'success' }) => (
+const Loader = () => (
   <div className="lds-grid">
     <div />
     <div />
