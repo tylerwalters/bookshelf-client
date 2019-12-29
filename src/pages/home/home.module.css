@@ -1,0 +1,13 @@
+.search {
+  margin-top: 20px;
+}
+
+.radios {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.pagination {
+  margin-top: 20px;
+}
