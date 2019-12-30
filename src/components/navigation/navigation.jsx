@@ -8,14 +8,14 @@ function Navigation({ location }) {
 
   return (
     <nav>
-      {pathname === '/add-new-book' && (
+      {pathname === '/add-book' && (
         <Link to="/">
-          <Button>Books</Button>
+          <Button outline>Books</Button>
         </Link>
       )}
       {pathname === '/' && (
         <Link to="/add-book">
-          <Button>Add Book</Button>
+          <Button outline>Add Book</Button>
         </Link>
       )}
     </nav>

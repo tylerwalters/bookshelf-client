@@ -2,9 +2,14 @@ import React from 'react';
 
 import styles from './button.module.css';
 
-function Button({ children, onClick }) {
+function Button({ children, onClick, outline = false, clear = false }) {
   return (
-    <button onClick={onClick} className="button button-outline">
+    <button
+      onClick={onClick}
+      className={`button ${outline ? 'button-outline' : ''} ${
+        clear ? 'button-clear' : ''
+      }`}
+    >
       {children}
     </button>
   );

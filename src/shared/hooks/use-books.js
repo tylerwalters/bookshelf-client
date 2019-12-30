@@ -3,6 +3,8 @@ import axios from 'axios';
 
 import { GlobalContext } from '../context/global';
 
+import useAuthentication from './use-authentication';
+
 import { API_URL } from '../constants/api';
 import { BOOKS_PER_PAGE } from '../constants/preferences';
 
@@ -12,6 +14,7 @@ function useBooks() {
   const [skip, setSkip] = useState(null);
   const [query, setQuery] = useState('');
   const [searchBy, setSearchBy] = useState('author');
+  const { isLoggedIn, token } = useAuthentication();
 
   function createFieldsQuery() {
     const fields = ['id', 'title', 'authors', 'imageLinks'];
@@ -50,8 +53,7 @@ function useBooks() {
       createPaginationQuery(),
       createSortQuery(),
       createSearchQuery(),
-      // `access_token=${globalState.auth.token}`
-      `access_token=3FRoWJWHXjzqw3N5tV2Gy8tM3RU7caUjVG7gR7oP3CiyCKHO1OcMwrI1ztrfsP2n`
+      `access_token=${globalState.auth.token}`
     ];
     const url = `${API_URL}/${path}?${queries.filter(Boolean).join('&')}`;
 
@@ -66,8 +68,7 @@ function useBooks() {
     const path = 'books/count';
     const queries = [
       createSearchQuery(false),
-      // `access_token=${globalState.auth.token}`,
-      `access_token=3FRoWJWHXjzqw3N5tV2Gy8tM3RU7caUjVG7gR7oP3CiyCKHO1OcMwrI1ztrfsP2n`
+      `access_token=${globalState.auth.token}`
     ];
     const url = `${API_URL}/${path}?${queries.join('&')}`;
 

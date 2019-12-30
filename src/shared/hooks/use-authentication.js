@@ -19,9 +19,15 @@ function useAuthentication() {
 
   function login(username, password) {
     const url = `${API_URL}/users/login`;
-    return axios.post(url, { username, password, ttl: -1 }).then(res => {
-      setAuthTokenCookie(res.data.id);
-    });
+    return axios
+      .post(url, { username, password, ttl: -1 })
+      .then(res => {
+        setAuthTokenCookie(res.data.id);
+        setAuthState({ isLoggedIn: true, token: res.data.id });
+      })
+      .catch(err =>
+        setAuthState({ isLoggedIn: false, error: 'Login failed.' })
+      );
   }
 
   function logout() {
@@ -31,19 +37,20 @@ function useAuthentication() {
     });
   }
 
-  function setAuthState(isLoggedIn, token) {
-    setGlobalState(curr => ({ ...curr, auth: { isLoggedIn, token } }));
+  function setAuthState(auth) {
+    setGlobalState(curr => ({ ...curr, auth }));
   }
 
   useEffect(() => {
     const token = getAuthTokenCookie();
 
-    if (token) setAuthState(true, token);
+    if (token) setAuthState({ isLoggedIn: true, token });
   }, []);
 
   return {
-    isLoggedIn: globalState.auth.loggedIn,
+    isLoggedIn: globalState.auth.isLoggedIn,
     token: globalState.auth.token,
+    error: globalState.auth.error,
     login,
     logout
   };

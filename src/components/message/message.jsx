@@ -1,8 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import styles from './message.module.css';
+
 function Message({ message, variant = '' }) {
-  return <div className={`message ${variant}`}>{message}</div>;
+  return (
+    <div className={`${styles.message} ${styles[variant]}`}>{message}</div>
+  );
 }
 
 Message.propTypes = {

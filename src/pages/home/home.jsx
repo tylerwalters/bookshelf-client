@@ -65,12 +65,14 @@ function Home() {
       </div>
 
       {books && (
-        <Message
-          message={`${count} books found. Displaying books ${bookRangeStart} - ${
-            bookRangeEnd > count ? count : bookRangeEnd
-          }.`}
-          variant="info"
-        />
+        <div className={styles.message}>
+          <Message
+            message={`${count} books found. Displaying books ${bookRangeStart} - ${
+              bookRangeEnd > count ? count : bookRangeEnd
+            }.`}
+            variant="info"
+          />
+        </div>
       )}
 
       {layout === 'list' ? (

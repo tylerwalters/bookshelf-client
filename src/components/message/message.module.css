@@ -4,11 +4,25 @@
 }
 
 .success {
-  border-color: green;
-  background-color: lightgreen;
+  color: #4f8a10;
+  border-color: #4f8a10;
+  background-color: #dff2bf;
+}
+
+.info {
+  color: #00529b;
+  border-color: #00529b;
+  background-color: #bde5f8;
+}
+
+.error {
+  color: #d8000c;
+  border-color: #d8000c;
+  background-color: #ffd2d2;
 }
 
 .warning {
-  border-color: #8a0000;
-  background-color: #f1a9b6;
+  color: #9f6000;
+  border-color: #9f6000;
+  background-color: #dff2bf;
 }
