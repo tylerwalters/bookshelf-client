@@ -20,9 +20,15 @@ function Home() {
   const [layout, setLayout] = useState('grid');
   const timeoutRef = useRef(null);
 
-  const { books, count, fetchBooks, setQuery, setSearchBy, setSkip } = useBooks(
-    {}
-  );
+  const {
+    books,
+    count,
+    fetchBooks,
+    setQuery,
+    setSearchBy,
+    setSkip,
+    removeBook
+  } = useBooks({});
 
   const bookRangeStart = BOOKS_PER_PAGE * (currentPage - 1) + 1;
   const bookRangeEnd = BOOKS_PER_PAGE * (currentPage - 1) + 12;
@@ -78,7 +84,12 @@ function Home() {
       {layout === 'list' ? (
         <BookList books={books} />
       ) : (
-        <BookGrid books={books} />
+        <BookGrid
+          books={books}
+          removeBook={
+            window.location.hash.includes('show-remove') ? removeBook : null
+          }
+        />
       )}
 
       <div className={styles.pagination}>
@@ -86,6 +97,7 @@ function Home() {
           totalCount={count}
           currentPage={currentPage}
           onClick={page => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             setCurrentPage(page);
             setSkip((page - 1) * BOOKS_PER_PAGE);
           }}

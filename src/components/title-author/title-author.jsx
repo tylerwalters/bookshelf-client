@@ -7,7 +7,7 @@ function TitleAuthor({ title, author }) {
   return (
     <div className={styles.container}>
       <div className={styles.title}>{title}</div>
-      <div className={styles.author}>by {author}</div>
+      {author && <div className={styles.author}>by {author}</div>}
     </div>
   );
 }

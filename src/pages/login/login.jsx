@@ -16,12 +16,6 @@ function Login() {
 
   const { login, error, isLoggedIn } = useAuthentication({});
 
-  console.log('isLoggedIn: ', isLoggedIn);
-
-  useEffect(() => {
-    console.log('isLoggedIn: ', isLoggedIn);
-  }, [isLoggedIn]);
-
   if (isLoggedIn) {
     return (
       <Redirect

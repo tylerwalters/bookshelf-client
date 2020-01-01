@@ -1,0 +1,17 @@
+.heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.search {
+  margin-top: 20px;
+}
+
+.pagination {
+  margin-top: 20px;
+}
+
+.message {
+  margin-bottom: 20px;
+}

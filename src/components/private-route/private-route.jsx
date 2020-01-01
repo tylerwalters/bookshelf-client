@@ -7,6 +7,8 @@ import useAuthentication from '../../shared/hooks/use-authentication';
 function PrivateRoute({ component: Component, ...rest }) {
   const { isLoggedIn } = useAuthentication();
 
+  if (isLoggedIn === undefined) return null;
+
   return (
     <Route
       {...rest}

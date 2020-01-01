@@ -70,7 +70,7 @@ function useBooks() {
       createSearchQuery(false),
       `access_token=${globalState.auth.token}`
     ];
-    const url = `${API_URL}/${path}?${queries.join('&')}`;
+    const url = `${API_URL}/${path}?${queries.filter(Boolean).join('&')}`;
 
     axios.get(url).then(res => {
       setGlobalState(curr => ({ ...curr, count: res.data.count }));
@@ -81,10 +81,9 @@ function useBooks() {
     const path = '/books';
     const queries = [
       'filter[fields][id]=true&filter[fields][authors]=true',
-      // `access_token=${globalState.auth.token}`
-      `access_token=3FRoWJWHXjzqw3N5tV2Gy8tM3RU7caUjVG7gR7oP3CiyCKHO1OcMwrI1ztrfsP2n`
+      `access_token=${globalState.auth.token}`
     ];
-    const url = `${API_URL}/${path}?${queries.join('&')}`;
+    const url = `${API_URL}/${path}?${queries.filter(Boolean).join('&')}`;
 
     axios.get(url).then(res => {
       const { data } = res;
@@ -102,10 +101,46 @@ function useBooks() {
 
   async function patchAuthorLastName(id, authorLastName) {
     await axios
-      .patch(
-        `${API_URL}/books/${id}?access_token=3FRoWJWHXjzqw3N5tV2Gy8tM3RU7caUjVG7gR7oP3CiyCKHO1OcMwrI1ztrfsP2n`,
-        { authorLastName: authorLastName }
-      )
+      .patch(`${API_URL}/books/${id}?access_token=${globalState.auth.token}`, {
+        authorLastName: authorLastName
+      })
+      .catch(err => console.error(err));
+  }
+
+  function addBook(book) {
+    const path = `/books`;
+    const query = `access_token=${globalState.auth.token}`;
+    const url = `${API_URL}/${path}?${query}`;
+
+    axios.post(url, book).catch(err => console.error(err));
+  }
+
+  function removeBook(id) {
+    const path = `/books/${id}`;
+    const query = `access_token=${globalState.auth.token}`;
+    const url = `${API_URL}/${path}?${query}`;
+
+    axios
+      .delete(url)
+      .then(() => fetchBooks())
+      .catch(err => console.error(err));
+  }
+
+  function searchBookOnGoogle(query) {
+    const queries = [`q=title:${encodeURIComponent(query)}`];
+    const url = `https://www.googleapis.com/books/v1/volumes?${queries
+      .filter(Boolean)
+      .join('&')}`;
+
+    axios
+      .get(url)
+      .then(res => {
+        const searchedBooks = res.data.items.map(item => ({
+          ...item.volumeInfo,
+          googleId: item.id
+        }));
+        setGlobalState({ ...globalState, searchedBooks });
+      })
       .catch(err => console.error(err));
   }
 
@@ -114,12 +149,15 @@ function useBooks() {
   return {
     books: globalState.books,
     count: globalState.count,
+    searchedBooks: globalState.searchedBooks,
     fetchBooks,
-    // setFilters,
     setSort,
     setSkip,
     setQuery,
-    setSearchBy
+    setSearchBy,
+    addBook,
+    removeBook,
+    searchBookOnGoogle
   };
 }
 
