@@ -44,7 +44,11 @@ function useAuthentication() {
   useEffect(() => {
     const token = getAuthTokenCookie();
 
-    if (token) setAuthState({ isLoggedIn: true, token });
+    if (token) {
+      setAuthState({ isLoggedIn: true, token });
+    } else {
+      setAuthState({ isLoggedIn: false });
+    }
   }, []);
 
   return {
